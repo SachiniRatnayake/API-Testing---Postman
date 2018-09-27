@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "7bc3ea2f-fbb7-4f3f-b03c-4418706a0db1",
+		"name": "Collection1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create record",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d6f47df-e11e-4a07-8db8-fc66e8f44115",
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"var noOfRecords = 10;",
+							"var firstName = 'Tom';",
+							"var lastName = 'Jones';",
+							"for ( var i=0; i < noOfRecords; i++){",
+							"    pm.sendRequest(",
+							"    {",
+							"        url:'http://localhost:8080/landlords',",
+							"        method:'POST',",
+							"        header:'Content-type:application/json',",
+							"        body:{",
+							"            mode : 'raw',",
+							"            raw: JSON.stringify({ \"firstName\" : firstName+i, \"lastName\" : lastName+i})",
+							"        }",
+							"        ",
+							"    }, ",
+							"    function (err, response) {} ",
+							"    );",
+							"}",
+							"",
+							"",
+							"",
+							"",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3a46ee85-ad40-4473-a963-63aae8bc0439",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"firstName\" : \"Tom6\",\n\"lastName\" : \"Jones6\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{base}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve specific record",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{base}}/TfvQmYAE",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base}}",
+						"TfvQmYAE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update record",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"firstName\" : \"postmanedited\",\n\"lastName\" : \"post\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{base}}/TfvQmYAE",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base}}",
+						"TfvQmYAE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all records",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "19d61239-f07f-4007-a490-b2bf372560c6",
+						"type": "text/javascript",
+						"exec": [
+							"/*",
+							"// Check for a specific first name for the first record returned",
+							"pm.test(\"First Name Exists Check\", function () {",
+							"    var expectedFirstName = \"Tom6\";",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].firstName).to.eql(expectedFirstName);",
+							"    console.log(jsonData[0].firstName);",
+							"});",
+							"*/",
+							"",
+							"",
+							"// Test for duplicate values    ",
+							"pm.test(\"Check for Duplicate Records\", function(){    ",
+							"    var someV = pm.response.json();",
+							"    ",
+							"    var found = false;",
+							"    var first = \"6\";",
+							"       for(var d = 0; d <someV.length; d++){",
+							"           for(var f=d; f < someV.length; f++){",
+							"                if (f != d)",
+							"                    if (someV[f].firstName == someV[d].firstName)",
+							"                        if (someV[f].lastName == someV[d].lastName){",
+							"                            console.log(someV[f].id +': ' + someV[f].firstName + ' ' + someV[f].lastName + \"   =   \" + someV[d].id +': ' + someV[d].firstName + ' ' + someV[d].lastName )",
+							"                            found = true;",
+							"                        }",
+							"           }",
+							"       }",
+							"    pm.expect(found).to.eql(true);",
+							"   }",
+							"",
+							")",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{base}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete record",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "57294f5f-763a-46bf-b9e5-760ae29a3ccb",
+						"type": "text/javascript",
+						"exec": [
+							"// Deletes all records in landlord",
+							"pm.sendRequest(\"http://localhost:8080/landlords\", function (err, response) {",
+							"    var someV = response.json();",
+							"    ",
+							"    for(var i=0; i<someV.length;i++){",
+							"    pm.sendRequest({url:'http://localhost:8080/landlords/' + someV[i].id ,method:'DELETE',header:'Content-type:application/json',body:{}}, function (err, response) {} );",
+							"    }",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/{{base}}/vKrwBmaw",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base}}",
+						"vKrwBmaw"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
